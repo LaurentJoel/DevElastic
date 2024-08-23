@@ -23,19 +23,19 @@ app.use((req, res, next) => {
   }
 });*/
 // Créer un client Elasticsearch
-/*const esClient = new Client({
-  node: 'https://c40c5d757e4b4197b27b3fd0862f2fd8.es.us-east-1.aws.elastic.cloud:443',
-  auth: {
-    username: 'elvira',
-    password: 'elvirambrenda12',
-    apiKey: 'VW96cXNaQUJLV3pnYm51Wi1vVWM6ZElvdHZfcm1RdG1LZ3lIb3BmVEhYUQ=='
-  }
-});*/
 const esClient = new Client({
+  node: 'https://a4ff63d1338c4462971467a4717c1146.us-central1.gcp.cloud.es.io:443',
+  auth: {
+    username: 'Laurent Mkounga',
+    password: 'mkoungalaurentjoel11',
+    apiKey: 'd1hSSmdKRUJKdFVoUlNFT2oxYWM6QWtTZU5VSjRROUNRMmk5S2hsQndSUQ=='
+  }
+});
+/*const esClient = new Client({
   node: 'http://192.168.50.180:9200/',
  
 });
-
+*/
 // ________________________ le le Endpoint pour interroger Elasticsearch____________________________
 app.get('/search/:body', async (req, res) => {
   try {
