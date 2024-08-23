@@ -36,7 +36,7 @@ class _SearchBarAppState extends State<SearchBarApp> {
           List<Map<String, dynamic>> results = List<Map<String, dynamic>>.from(data['hits']['hits'].map((item) => {
             '_id': item['_id'],
             
-            'section': item['highlight']['description'][0],
+            'section': item['highlight']['content'][0],
           }));
           print (results);
 
