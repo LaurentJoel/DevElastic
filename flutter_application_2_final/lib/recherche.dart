@@ -88,6 +88,7 @@ class _SearchBarAppState extends State<SearchBarApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Search Bar App',
       theme: isDarkMode ? ThemeData.dark() : ThemeData.light(),
       home: Scaffold(
