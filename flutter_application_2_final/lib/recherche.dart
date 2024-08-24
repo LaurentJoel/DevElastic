@@ -35,10 +35,9 @@ class _SearchBarAppState extends State<SearchBarApp> {
           Map<String, dynamic> data = json.decode(response.body);
           List<Map<String, dynamic>> results = List<Map<String, dynamic>>.from(data['hits']['hits'].map((item) => {
             '_id': item['_id'],
-            
             'section': item['highlight']['content'][0],
           }));
-          print (results);
+          print(results);
 
           setState(() {
             searchResults = results;
@@ -58,7 +57,7 @@ class _SearchBarAppState extends State<SearchBarApp> {
         print("Erreur lors de la requête : $stackTrace");
       }
     } finally {
-      
+      // Ensure to close the client in a real-world app to avoid memory leaks
     }
   }
 
@@ -73,7 +72,10 @@ class _SearchBarAppState extends State<SearchBarApp> {
       }
       spans.add(TextSpan(
         text: match.group(1),
-        style: const TextStyle(color: Colors.yellow, fontWeight: FontWeight.bold),
+        style: TextStyle(
+          color: isDarkMode ? Colors.yellow : Colors.orange, // Adjust for dark mode visibility
+          fontWeight: FontWeight.bold,
+        ),
       ));
       lastMatchEnd = match.end;
     }
@@ -94,17 +96,24 @@ class _SearchBarAppState extends State<SearchBarApp> {
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Résultats de recherche'),
-          backgroundColor: Colors.blue,
-          /*actions: [
+          backgroundColor: isDarkMode ? Colors.grey[850] : Colors.blue,
+          actions: [
             IconButton(
-              icon: const Icon(Icons.lightbulb),
+              icon: Icon(
+                isDarkMode ? Icons.light_mode : Icons.dark_mode,
+                color: isDarkMode ? Colors.yellow : Colors.white,
+              ),
               onPressed: () {
                 setState(() {
                   isDarkMode = !isDarkMode;
+                  // Re-fetch the search results to ensure they reflect the new theme
+                  if (_searchController.text.isNotEmpty) {
+                    search(_searchController.text);
+                  }
                 });
               },
             ),
-          ],*/
+          ],
         ),
         body: Center(
           child: Container(
@@ -151,19 +160,15 @@ class _SearchBarAppState extends State<SearchBarApp> {
                             text: highlightText(section),
                           ),
                           onTap: () {
-                          
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => DocumentDetailPage(
-        documentId: result['_id'], 
-        searchTerm: _searchController.text,
-      ),
-    ),
-  );
-
-
-                            // Action à effectuer lorsqu'un résultat est sélectionné mais on vera aprés je refléchi encore bon je vient s 
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DocumentDetailPage(
+                                  documentId: result['_id'], 
+                                  searchTerm: _searchController.text,
+                                ),
+                              ),
+                            );
                           },
                         ),
                       );
@@ -175,7 +180,7 @@ class _SearchBarAppState extends State<SearchBarApp> {
           ),
         ),
         bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: Colors.blue,
+          backgroundColor: isDarkMode ? Colors.grey[850] : Colors.blue,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
