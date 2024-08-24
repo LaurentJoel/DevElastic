@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const { htmlToText } = require('html-to-text');
 
 const { Client } = require('@elastic/elasticsearch-serverless');
 //const hljs = require('highlight.js');
@@ -260,15 +261,20 @@ app.get('/SearchHighligth', async (req, res) => {
     } else {
       const results = response.hits.hits.map(hit => {
         const highlightedContent = hit.highlight.content
-          ? hit.highlight.content.map(section => hljs.highlight('html', section).value)
-          : hit._source.content;
+          ? hit.highlight.content.map(section => {
+              // Apply syntax highlighting and then strip HTML tags
+              const highlighted = hljs.highlight('html', section).value;
+              return stripHtmlTags(highlighted);
+            })
+          : stripHtmlTags(hit._source.content);  // Also strip HTML tags from original content
+    
         return {
           _id: hit._id,
           highlightedContent
         };
       });
       res.json(results);
-    }
+    }    
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Une erreur est survenue lors de la recherbbbbbbbbbbbbbbbche' });
