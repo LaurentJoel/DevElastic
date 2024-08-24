@@ -95,7 +95,7 @@ class _SearchBarAppState extends State<SearchBarApp> {
         appBar: AppBar(
           title: const Text('Résultats de recherche'),
           backgroundColor: Colors.blue,
-          actions: [
+          /*actions: [
             IconButton(
               icon: const Icon(Icons.lightbulb),
               onPressed: () {
@@ -104,7 +104,7 @@ class _SearchBarAppState extends State<SearchBarApp> {
                 });
               },
             ),
-          ],
+          ],*/
         ),
         body: Center(
           child: Container(
