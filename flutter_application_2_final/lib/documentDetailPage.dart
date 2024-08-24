@@ -72,26 +72,35 @@ class _DocumentDetailPageState extends State<DocumentDetailPage> {
   }
 
   Widget _buildHighlightedText(String content, String searchTerm) {
+    // Remove HTML tags
+    final cleanContent = _removeHtmlTags(content);
     
+    // Highlight search term
     List<TextSpan> spans = [];
     int start = 0;
     int index;
 
-    while ((index = content.toLowerCase().indexOf(searchTerm.toLowerCase(), start)) != -1) {
+    while ((index = cleanContent.toLowerCase().indexOf(searchTerm.toLowerCase(), start)) != -1) {
       if (index > start) {
-        spans.add(TextSpan(text: content.substring(start, index)));
+        spans.add(TextSpan(text: cleanContent.substring(start, index)));
       }
       spans.add(TextSpan(
-        text: content.substring(index, index + searchTerm.length),
+        text: cleanContent.substring(index, index + searchTerm.length),
         style: const TextStyle(backgroundColor: Colors.yellow),
       ));
       start = index + searchTerm.length;
     }
 
-    if (start < content.length) {
-      spans.add(TextSpan(text: content.substring(start)));
+    if (start < cleanContent.length) {
+      spans.add(TextSpan(text: cleanContent.substring(start)));
     }
 
     return Text.rich(TextSpan(children: spans));
+  }
+
+  // Method to remove HTML tags from content
+  String _removeHtmlTags(String html) {
+    final RegExp tagExp = RegExp(r'<[^>]*>', multiLine: true, caseSensitive: false);
+    return html.replaceAll(tagExp, '');
   }
 }
